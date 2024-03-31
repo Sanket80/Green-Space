@@ -4,6 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Intro/intro_page1.dart';
 import '../Intro/intro_page2.dart';
 import '../Intro/intro_page3.dart';
+import 'Login.dart';
 
 
 class onBoardingScreen extends StatefulWidget {
@@ -102,7 +103,7 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),),);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),),);
                               },
                               child: Container(
                                 child: Text(
