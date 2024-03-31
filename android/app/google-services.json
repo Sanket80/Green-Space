@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "144812210558",
+    "project_id": "garden-management-7c59e",
+    "storage_bucket": "garden-management-7c59e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144812210558:android:8c312af49a8f79a6a4db2f",
+        "android_client_info": {
+          "package_name": "com.example.greenspace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyo2hUyYdb1EjYg2AlJ-L5FsFPbxsdYvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
