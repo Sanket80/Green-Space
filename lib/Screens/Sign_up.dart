@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:greenspace/Screens/AddPark.dart';
 import 'package:greenspace/Screens/Login.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
@@ -49,7 +50,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'role': selectedRole,
       });
 
-      Navigator.of(context).pop();
+      if(selectedRole == 'Manager'){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AddPark()));
+      }
 
     } catch (e) {
       Navigator.of(context).pop();

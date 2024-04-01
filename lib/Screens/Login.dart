@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:greenspace/Screens/AddPark.dart';
 import 'package:greenspace/Screens/Sign_up.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
 
-      Navigator.of(context).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AddPark()));
     } catch (e) {
       Navigator.of(context).pop();
       showDialog(
