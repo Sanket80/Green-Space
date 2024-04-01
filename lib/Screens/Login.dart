@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Flexible(child: Container(), flex: 1),
-                  Image.asset('assets/logo.png',height: 200,),
+                  Image.asset('assets/logo.png',height: 300,),
                   SizedBox(height: 8),
                   Text(
                     'Unlock your Career with AI Powered Talent Match',

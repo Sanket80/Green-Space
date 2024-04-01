@@ -1,4 +1,6 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:greenspace/Screens/Tasks.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../Intro/intro_page1.dart';
@@ -68,11 +70,11 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
                 if (onLastPage)
                   GestureDetector(
                     onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(
-                      //   builder: (context) {
-                      //     return Register();
-                      //   },
-                      // ));
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return Tasks();
+                        },
+                      ));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
