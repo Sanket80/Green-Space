@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:greenspace/Screens/Sign_up.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
 import 'onBoarding.dart';
@@ -143,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => onBoardingScreen(),
+                              builder: (context) => RegisterScreen(),
                             ),);
                         },
                         child: Container(
