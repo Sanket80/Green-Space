@@ -23,6 +23,7 @@ class _AddParkState extends State<AddPark> {
 
   // add Park to the database
   Future addPark() async {
+    User? user = FirebaseAuth.instance.currentUser;
     try {
       showDialog(
         context: context,
@@ -39,17 +40,25 @@ class _AddParkState extends State<AddPark> {
         },
       );
 
-      await FirebaseFirestore.instance.collection('parks').doc(FirebaseAuth.instance.currentUser!.uid).set({
-        'name': _parkNameController.text,
-        'location': _parkLocationController.text,
-        'description': _parkDescriptionController.text,
-        'size': _parkSizeController.text,
-        'contact': _parkcontactController.text,
-        'moto': _parkMotoController.text,
-        'date': _date.text,
-        'time': _time.text,
-        'helpCategory': helpCategory,
+      String managerUid = user!.uid;
+
+      await FirebaseFirestore.instance.collection('users').doc(managerUid).update({
+        'parks': FieldValue.arrayUnion([
+          {
+            'name': _parkNameController.text,
+            'location': _parkLocationController.text,
+            'description': _parkDescriptionController.text,
+            'size': _parkSizeController.text,
+            'contact': _parkcontactController.text,
+            'moto': _parkMotoController.text,
+            'date': _date.text,
+            'time': _time.text,
+            'helpCategory': helpCategory,
+            'candidates': [],  // Initialize an empty array for candidates
+          }
+        ]),
       });
+
 
       Navigator.of(context).pop();
       showDialog(

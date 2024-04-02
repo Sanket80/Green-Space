@@ -43,12 +43,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: _passwordController.text,
       );
 
-      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
-        'name': _nameController.text,
-        'email': _emailController.text,
-        'phone': _phoneController.text,
-        'role': selectedRole,
-      });
+      // Check if the user is registering as a manager
+      if (selectedRole == 'Manager') {
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'phone': _phoneController.text,
+          'role': selectedRole,
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+          'parks': [],  // Initialize 'parks' as an empty array for the manager
+        });
+      } else {
+        await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'phone': _phoneController.text,
+          'role': selectedRole,
+          'uid': FirebaseAuth.instance.currentUser!.uid,
+        });
+      }
+
 
       if(selectedRole == 'Manager'){
         Navigator.push(context, MaterialPageRoute(builder: (context) => AddPark()));
