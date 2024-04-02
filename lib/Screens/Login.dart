@@ -1,10 +1,12 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:greenspace/Screens/AddPark.dart';
 import 'package:greenspace/Screens/Sign_up.dart';
+import 'package:greenspace/Screens/Tasks.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
 import 'onBoarding.dart';
@@ -23,8 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
-  Future<void> login() async{
-    try{
+  Future<void> login() async {
+    try {
       showDialog(
         context: context,
         builder: (context) {
@@ -45,9 +47,32 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AddPark()));
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        // Fetch user role from Firestore
+        DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+        String? role = userSnapshot['role'];
+
+        Navigator.of(context).pop(); // Close the signing in dialog
+
+        // Navigate based on the user's role
+        if (role == 'Manager') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddPark()), // Replace with your Manager screen
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Tasks()), // Replace with your User screen
+          );
+        }
+      }
     } catch (e) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); // Close the signing in dialog
+
       showDialog(
         context: context,
         builder: (context) {
@@ -67,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
 
   @override
   void dispose() {

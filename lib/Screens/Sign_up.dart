@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:greenspace/Screens/AddPark.dart';
 import 'package:greenspace/Screens/Login.dart';
+import 'package:greenspace/Screens/Tasks.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -66,6 +67,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if(selectedRole == 'Manager'){
         Navigator.push(context, MaterialPageRoute(builder: (context) => AddPark()));
+      }
+      else{
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Tasks()));
       }
 
     } catch (e) {

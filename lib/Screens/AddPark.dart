@@ -55,6 +55,8 @@ class _AddParkState extends State<AddPark> {
             'time': _time.text,
             'helpCategory': helpCategory,
             'candidates': [],  // Initialize an empty array for candidates
+            // unique id for the park
+            'Id': DateTime.now().millisecondsSinceEpoch.toString(),
           }
         ]),
       });

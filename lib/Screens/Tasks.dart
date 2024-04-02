@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenspace/Screens/ParkDetail.dart';
@@ -10,22 +11,25 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
-
   Future<List<dynamic>> getAllParksForManagers() async {
     try {
-      // Fetch all managers
-      QuerySnapshot<Map<String, dynamic>> managersSnapshot = await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'Manager').get();
+      QuerySnapshot<Map<String, dynamic>> managersSnapshot =
+      await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: 'Manager')
+          .get();
 
       List<dynamic> allParks = [];
 
       print('Total managers found: ${managersSnapshot.size}');
 
-      // Iterate through each manager and fetch their parks
-      for (QueryDocumentSnapshot<Map<String, dynamic>> managerDoc in managersSnapshot.docs) {
+      for (QueryDocumentSnapshot<Map<String, dynamic>> managerDoc
+      in managersSnapshot.docs) {
         String managerUid = managerDoc['uid'];
         print('Fetching parks for manager with uid: $managerUid');
 
-        DocumentSnapshot<Map<String, dynamic>> parksSnapshot = await FirebaseFirestore.instance.collection('users').doc(managerUid).get();
+        DocumentSnapshot<Map<String, dynamic>> parksSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(managerUid).get();
 
         List<dynamic> parks = parksSnapshot.data()?['parks'] ?? [];
         allParks.addAll(parks);
@@ -39,6 +43,69 @@ class _TasksState extends State<Tasks> {
       return [];
     }
   }
+
+  Future<void> joinParkTask(String parkId) async {
+    try {
+      String? userName;
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        // Fetch the user's name
+        DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+        userName = userSnapshot['name'];
+
+        if (userName != null) {
+          print('User name: $userName');
+
+          // Fetch all managers
+          QuerySnapshot managersSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .where('role', isEqualTo: 'Manager')
+              .get();
+
+          if (managersSnapshot.docs.isNotEmpty) {
+            for (var managerDoc in managersSnapshot.docs) {
+              List<dynamic>? parks = (managerDoc.data() as Map<String, dynamic>?)?['parks'] as List<dynamic>?;
+
+              if (parks != null) {
+                // Find the park by its Id in the manager's 'parks' array
+                for (int i = 0; i < parks.length; i++) {
+                  if (parks[i]['Id'] == parkId) {
+                    print('Updating candidates array for park with Id: $parkId');
+
+                    // Update the 'candidates' array locally
+                    parks[i]['candidates'].add(userName);
+
+                    // Update the 'parks' array in the manager document
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(managerDoc.id)
+                        .update({'parks': parks});
+
+                    print('User added to the park successfully');
+                    return;
+                  }
+                }
+              }
+            }
+            print('Park with Id $parkId does not exist for any manager');
+          } else {
+            print('No managers found');
+          }
+        }
+      } else {
+        print('User not found');
+      }
+    } catch (e) {
+      print('Error adding user to the park: $e');
+    }
+  }
+
+
+
+
+
 
 
   @override
@@ -108,21 +175,18 @@ class _TasksState extends State<Tasks> {
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           height: 180,
                                           width: double.infinity,
-                                          // image form asset
-                                          child: Container(
-                                              child: Image.asset(
+                                          child: Image.asset(
                                             'assets/man.png',
                                             height: 150,
                                             width: 150,
-                                          )),
+                                          ),
                                           decoration: BoxDecoration(
                                             color: Color(0xffDBFDD6),
-                                            // border radius for top left and top right only
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10),
@@ -142,7 +206,7 @@ class _TasksState extends State<Tasks> {
                                                 ),
                                                 maxLines: 2,
                                                 overflow:
-                                                    TextOverflow.ellipsis,
+                                                TextOverflow.ellipsis,
                                               ),
                                               Text(
                                                 parkData['name'] ?? '',
@@ -160,13 +224,13 @@ class _TasksState extends State<Tasks> {
                                                 ),
                                                 maxLines: 6,
                                                 overflow:
-                                                    TextOverflow.ellipsis,
+                                                TextOverflow.ellipsis,
                                               ),
                                               SizedBox(height: 10),
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
+                                                MainAxisAlignment
+                                                    .spaceAround,
                                                 children: [
                                                   Row(
                                                     children: [
@@ -214,7 +278,7 @@ class _TasksState extends State<Tasks> {
                                                       SizedBox(width: 4),
                                                       Text(
                                                         parkData[
-                                                                'location'] ??
+                                                        'location'] ??
                                                             '',
                                                         style: TextStyle(
                                                           color: Colors.grey,
@@ -226,23 +290,26 @@ class _TasksState extends State<Tasks> {
                                                 ],
                                               ),
                                               SizedBox(height: 10),
-                                              // 3 circular avatars in a row with text in between them
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .center,
+                                                MainAxisAlignment
+                                                    .center,
                                                 children: [
                                                   Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.grey, width: 2),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 2),
                                                     ),
                                                     child: CircleAvatar(
                                                       radius: 24,
-                                                      backgroundColor: Colors.white,
+                                                      backgroundColor:
+                                                      Colors.white,
                                                       child: Text(
                                                         '+10',
-                                                        style: TextStyle(color: Colors.grey),
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
                                                       ),
                                                     ),
                                                   ),
@@ -250,14 +317,19 @@ class _TasksState extends State<Tasks> {
                                                   Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.black, width: 2),
+                                                      border: Border.all(
+                                                          color: Colors.black,
+                                                          width: 2),
                                                     ),
                                                     child: CircleAvatar(
                                                       radius: 24,
-                                                      backgroundColor: Color(0xffDBFDD6),
+                                                      backgroundColor:
+                                                      Color(0xffDBFDD6),
                                                       child: Text(
                                                         '+20',
-                                                        style: TextStyle(color: Colors.black),
+                                                        style: TextStyle(
+                                                            color:
+                                                            Colors.black),
                                                       ),
                                                     ),
                                                   ),
@@ -265,34 +337,42 @@ class _TasksState extends State<Tasks> {
                                                   Container(
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.grey, width: 2),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 2),
                                                     ),
                                                     child: CircleAvatar(
                                                       radius: 24,
-                                                      backgroundColor: Colors.white,
+                                                      backgroundColor:
+                                                      Colors.white,
                                                       child: Text(
                                                         '+30',
-                                                        style: TextStyle(color: Colors.grey),
+                                                        style: TextStyle(
+                                                            color: Colors.grey),
                                                       ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                               SizedBox(height: 20),
-
-                                              // Elevated Button
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                                 children: [
                                                   ElevatedButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      if (parkData['Id'] != null) {
+                                                        joinParkTask(parkData['Id']);
+                                                      } else {
+                                                        print('Park ID is null');
+                                                      }
+                                                    },
                                                     child: Padding(
                                                       padding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 14,
-                                                              vertical: 12),
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 14,
+                                                          vertical: 12),
                                                       child: Text(
                                                         'Join Task',
                                                         style: TextStyle(
@@ -303,12 +383,12 @@ class _TasksState extends State<Tasks> {
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       primary: Color(
-                                                          0xff436850), // Background color
+                                                          0xff436850),
                                                       shape:
-                                                          RoundedRectangleBorder(
+                                                      RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8), // Adjust the radius as per your preference
+                                                        BorderRadius
+                                                            .circular(8),
                                                       ),
                                                     ),
                                                   ),
