@@ -102,6 +102,24 @@ class _TasksState extends State<Tasks> {
     }
   }
 
+  // random color function, i will provide the color code and i want like 1 card to have 1 color and the next card to have another color
+  Color randomColor(int index) {
+    List<Color> colorList = [
+      Color(0xffDBFDD6),
+      Color(0xffFDD2D2),
+      // Color(0xffFDD2F5),
+      Color(0xffD2F5FD),
+      Color(0xffF5F5D2),
+      Color(0xffD2F5D2),
+      // Color(0xffD2D2D2),
+      Color(0xffF5F5F5),
+    ];
+
+    int uniqueSeed = index + DateTime.now().second;
+    return colorList[uniqueSeed % colorList.length];
+  }
+
+
 
 
 
@@ -132,7 +150,6 @@ class _TasksState extends State<Tasks> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
                 FutureBuilder<List<dynamic>>(
                   future: getAllParksForManagers(),
                   builder: (context, snapshot) {
@@ -186,7 +203,7 @@ class _TasksState extends State<Tasks> {
                                             width: 150,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Color(0xffDBFDD6),
+                                            color: randomColor(index),
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10),
@@ -323,8 +340,7 @@ class _TasksState extends State<Tasks> {
                                                     ),
                                                     child: CircleAvatar(
                                                       radius: 24,
-                                                      backgroundColor:
-                                                      Color(0xffDBFDD6),
+                                                      backgroundColor: randomColor(index),
                                                       child: Text(
                                                         '+20',
                                                         style: TextStyle(
@@ -354,6 +370,11 @@ class _TasksState extends State<Tasks> {
                                                   ),
                                                 ],
                                               ),
+                                              SizedBox(height: 6),
+                                              Text('*These points can be converted to rewards.',style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10,
+                                              ),),
                                               SizedBox(height: 20),
                                               Row(
                                                 mainAxisAlignment:
