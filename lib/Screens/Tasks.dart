@@ -11,10 +11,34 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getTaskData() async {
-    return FirebaseFirestore.instance.collection('parks').get();
-  }
+  Future<List<dynamic>> getAllParksForManagers() async {
+    try {
+      // Fetch all managers
+      QuerySnapshot<Map<String, dynamic>> managersSnapshot = await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'Manager').get();
 
+      List<dynamic> allParks = [];
+
+      print('Total managers found: ${managersSnapshot.size}');
+
+      // Iterate through each manager and fetch their parks
+      for (QueryDocumentSnapshot<Map<String, dynamic>> managerDoc in managersSnapshot.docs) {
+        String managerUid = managerDoc['uid'];
+        print('Fetching parks for manager with uid: $managerUid');
+
+        DocumentSnapshot<Map<String, dynamic>> parksSnapshot = await FirebaseFirestore.instance.collection('users').doc(managerUid).get();
+
+        List<dynamic> parks = parksSnapshot.data()?['parks'] ?? [];
+        allParks.addAll(parks);
+      }
+
+      print('Total parks fetched: ${allParks.length}');
+
+      return allParks;
+    } catch (e) {
+      print('Error fetching parks for managers: $e');
+      return [];
+    }
+  }
 
 
   @override
@@ -42,24 +66,25 @@ class _TasksState extends State<Tasks> {
                   ],
                 ),
                 SizedBox(height: 20),
-                FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  future: getTaskData(),
+                FutureBuilder<List<dynamic>>(
+                  future: getAllParksForManagers(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     }
 
                     if (snapshot.hasError) {
+                      print('Error: ${snapshot.error}');
                       return Text('Error fetching data');
                     }
 
-                    if (!snapshot.hasData ||
-                        snapshot.data == null ||
-                        snapshot.data!.docs.isEmpty) {
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      print('No data fetched');
                       return Text('No data available');
                     }
 
-                    final parkList = snapshot.data!.docs;
+                    final parkList = snapshot.data!;
+                    print('Fetched ${parkList.length} parks');
 
                     return SizedBox(
                       height: 600,
@@ -67,7 +92,7 @@ class _TasksState extends State<Tasks> {
                         scrollDirection: Axis.horizontal,
                         itemCount: parkList.length,
                         itemBuilder: (context, index) {
-                          final parkData = parkList[index].data()!;
+                          final parkData = parkList[index];
 
                           return Container(
                             width: 320,
