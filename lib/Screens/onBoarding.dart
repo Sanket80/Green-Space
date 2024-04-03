@@ -69,13 +69,13 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
                   ),
                 if (onLastPage)
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return Tasks();
-                        },
-                      ));
-                    },
+                    // onTap: () {
+                    //   Navigator.push(context, MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return Tasks();
+                    //     },
+                    //   ));
+                    // },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -132,7 +132,7 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
                   GestureDetector(
                     onTap: () {
                       _controller.nextPage(
-                        duration: Duration(milliseconds: 300),
+                        duration: Duration(milliseconds: 200),
                         curve: Curves.easeIn,
                       );
                     },

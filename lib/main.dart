@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:greenspace/Screens/ManagerDashboard.dart';
 import 'package:greenspace/Screens/Tasks.dart';
 import 'package:greenspace/Screens/onBoarding.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: onBoardingScreen(),
+      home: ManagerDashboard(),
     );
   }
 }
