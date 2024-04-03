@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:greenspace/Screens/AddPark.dart';
 
 class ManagerDashboard extends StatefulWidget {
   const ManagerDashboard({super.key});
@@ -9,6 +11,9 @@ class ManagerDashboard extends StatefulWidget {
 }
 
 class _ManagerDashboardState extends State<ManagerDashboard> {
+
+  int _selectedIndex = 0;
+
   Future<List<dynamic>> getParksForManagers() async {
     try {
       QuerySnapshot<Map<String, dynamic>> managersSnapshot = await FirebaseFirestore.instance
@@ -167,7 +172,7 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
                                             onPrimary: Colors.white,
                                             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius: BorderRadius.circular(4),
                                             ),
                                           ),
                                           child: Padding(
@@ -181,7 +186,6 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -193,6 +197,72 @@ class _ManagerDashboardState extends State<ManagerDashboard> {
                     );
                   },
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: GNav(
+            selectedIndex: _selectedIndex,
+            backgroundColor: Colors.black,
+            activeColor: Colors.white,
+            color: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            gap: 8,
+            padding: EdgeInsets.all(12),
+            tabs: [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                },
+              ),
+              GButton(
+                icon: Icons.add,
+                text: 'Add Park',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddPark(),
+                    ),
+                  );
+                },
+              ),
+              GButton(
+                icon: Icons.chat,
+                text: 'Chat',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ChatBot(),
+                  //   ),
+                  // );
+                },
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Jobs',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 3;
+                  });
+                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                },
               ),
             ],
           ),

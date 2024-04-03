@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:greenspace/Screens/AddPark.dart';
+import 'package:greenspace/Screens/ManagerDashboard.dart';
 import 'package:greenspace/Screens/Sign_up.dart';
 import 'package:greenspace/Screens/Tasks.dart';
 import 'package:greenspace/Widgets/text_field.dart';
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (role == 'Manager') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddPark()), // Replace with your Manager screen
+            MaterialPageRoute(builder: (context) => ManagerDashboard()), // Replace with your Manager screen
           );
         } else {
           Navigator.push(

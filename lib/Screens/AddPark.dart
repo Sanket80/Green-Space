@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:greenspace/Screens/ManagerDashboard.dart';
 import 'package:greenspace/Widgets/text_field.dart';
 
 class AddPark extends StatefulWidget {
@@ -20,6 +22,7 @@ class _AddParkState extends State<AddPark> {
   TextEditingController _date = TextEditingController();
   TextEditingController _time = TextEditingController();
   String? helpCategory;
+  int _selectedIndex = 1;
 
   // add Park to the database
   Future addPark() async {
@@ -299,6 +302,72 @@ class _AddParkState extends State<AddPark> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: GNav(
+            selectedIndex: _selectedIndex,
+            backgroundColor: Colors.black,
+            activeColor: Colors.white,
+            color: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            gap: 8,
+            padding: EdgeInsets.all(12),
+            tabs: [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ManagerDashboard(),
+                    ),
+                  );
+                },
+              ),
+              GButton(
+                icon: Icons.add,
+                text: 'Add Park',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+              ),
+              GButton(
+                icon: Icons.chat,
+                text: 'Chat',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ChatBot(),
+                  //   ),
+                  // );
+                },
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Jobs',
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 3;
+                  });
+                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                },
+              ),
+            ],
           ),
         ),
       ),
