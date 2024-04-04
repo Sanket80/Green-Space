@@ -171,7 +171,7 @@ class _TasksState extends State<Tasks> {
                     print('Fetched ${parkList.length} parks');
 
                     return SizedBox(
-                      height: 600,
+                      height: 630,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: parkList.length,
@@ -186,7 +186,7 @@ class _TasksState extends State<Tasks> {
                             ),
                             margin: EdgeInsets.only(right: 10),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: Column(
                                 children: [
                                   Expanded(
@@ -232,18 +232,21 @@ class _TasksState extends State<Tasks> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                parkData['description'] ?? '',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.grey,
+                                              SizedBox(height: 14),
+                                              Padding(
+                                                padding: const EdgeInsets.all(4.0),
+                                                child: Text(
+                                                  parkData['description'] ?? '',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  maxLines: 6,
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
                                                 ),
-                                                maxLines: 6,
-                                                overflow:
-                                                TextOverflow.ellipsis,
                                               ),
-                                              SizedBox(height: 10),
+                                              SizedBox(height: 14),
                                               Row(
                                                 mainAxisAlignment:
                                                 MainAxisAlignment
@@ -306,7 +309,7 @@ class _TasksState extends State<Tasks> {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(height: 10),
+                                              SizedBox(height: 14),
                                               Row(
                                                 mainAxisAlignment:
                                                 MainAxisAlignment
@@ -395,16 +398,15 @@ class _TasksState extends State<Tasks> {
                                                           horizontal: 14,
                                                           vertical: 12),
                                                       child: Text(
-                                                        'Help Park',
+                                                        'Join Task',
                                                         style: TextStyle(
-                                                          color: Colors.white,
+                                                          color: Colors.black,
                                                         ),
                                                       ),
                                                     ),
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                      primary: Color(
-                                                          0xff436850),
+                                                      primary: randomColor(index),
                                                       shape:
                                                       RoundedRectangleBorder(
                                                         borderRadius:
